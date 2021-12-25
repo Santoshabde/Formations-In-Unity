@@ -12,25 +12,27 @@ public enum FormationShape
 
 public class Formation : MonoBehaviour
 {
-    [SerializeField] public FormationShape formationShape;
-    public FormationShape FormationShapeValue => formationShape;
-
-    [SerializeField] public GameObject indicator;
-    [SerializeField] public FormationAgent formationAgent;
+    #region Inspector Exposed Variables
+    //Required Properties!!
+    public FormationShape formationShape;
+    public GameObject indicator;
+    public FormationAgent formationAgent;
+    public GameObject spawnEffect;
+    public AudioSource onAddSound;
     //Circle Properties
-    [SerializeField] public float radius;
+    public float radius;
     //Horizontal Line Properties
-    [SerializeField] public float lenght;
+    public float lenght;
     //Cone Properties
     public float angle;
     public float slantHeight;
     //Generic Properties
-    [SerializeField] public int numberToSpawn;
+    public int numberToSpawn;
     public int amountToSpawn;
     public int amountToRemove;
-    public GameObject spawnEffect;
-    public AudioSource onAddSound;
+    #endregion
 
+    #region Private Variables
     //Private Variables Section
     private List<GameObject> indicatorsList = new List<GameObject>();
     private List<GameObject> agentsList = new List<GameObject>();
@@ -42,6 +44,9 @@ public class Formation : MonoBehaviour
     private ConeFormation coneFormation;
 
     private bool formShape;
+    #endregion
+
+    #region Unity Defined Functions
     void Start()
     {
         //Circle
@@ -111,7 +116,9 @@ public class Formation : MonoBehaviour
             }
         }
     }
+    #endregion
 
+    #region Custom Functions
     //Spawning formation agents and formation transforms - where agents are assigned each transform!!
     private void SpawnFormationPointsAndAgents(int number)
     {
@@ -130,8 +137,12 @@ public class Formation : MonoBehaviour
     //Call this function if you want to add a formation agent into your existing formation!!
     public void AddFormationAgent(int count)
     {
-        Instantiate(spawnEffect, transform.position, Quaternion.identity);
-        onAddSound.Play();
+        if (spawnEffect != null)
+            Instantiate(spawnEffect, transform.position, Quaternion.identity);
+
+        if (onAddSound != null)
+            onAddSound.Play();
+
         count = currentFormationShape.AmountToExpand(count);
 
         numberToSpawn += count;
@@ -139,10 +150,14 @@ public class Formation : MonoBehaviour
         SpawnFormationPointsAndAgents(count);
     }
 
+    //Call this function if you want to remove an agent in your existing formation
     public void RemoveFormationAgent(int count)
     {
         formShape = false;
-        onAddSound.Play();
+
+        if (onAddSound != null)
+            onAddSound.Play();
+
         count = currentFormationShape.AmountToExpand(count);
 
         for (int i = 0; i < count; i++)
@@ -156,9 +171,11 @@ public class Formation : MonoBehaviour
             indicatorsList.RemoveAt(i);
             agentsList.RemoveAt(i);
 
-            Instantiate(spawnEffect, toRemove.transform.position, Quaternion.identity);        
+            if (spawnEffect != null)
+                Instantiate(spawnEffect, toRemoveAgent.transform.position, Quaternion.identity);        
         }
 
         formShape = true;
     }
+    #endregion
 }

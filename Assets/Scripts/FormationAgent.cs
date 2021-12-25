@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class FormationAgent : MonoBehaviour
 {
     [SerializeField] private NavMeshAgent agent;
@@ -12,6 +13,7 @@ public class FormationAgent : MonoBehaviour
 
     private void Update()
     {
+        if(animator != null)
         animator.SetFloat("Move", agent.velocity.magnitude);
 
         if (toFollow != null)

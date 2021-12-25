@@ -16,7 +16,7 @@ public class Formation_Editor : Editor
 
         formation.formationShape = (FormationShape)EditorGUILayout.EnumPopup("Formation Type", formation.formationShape);   
         var style = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold,  wordWrap = true};
-        switch (formation.FormationShapeValue)
+        switch (formation.formationShape)
         {
             case FormationShape.StraightLine:
                 GUILayout.BeginHorizontal(EditorUtilities.SolidBackgroundStyle_White);
